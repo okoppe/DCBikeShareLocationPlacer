@@ -146,6 +146,9 @@ def displayV(S, R, tri_list, voronoi_cell_map):
     # Plot the samples
 	#for Si, Ri in zip(S, R):
 		#ax.add_artist(plot.Circle(Si, Ri, fill = True, alpha = .4, lw = 0., color = '#8080f0', zorder = 1))
+    #Instead of circle add a dot for each point
+	for Si in S:
+		ax.scatter(Si[0], Si[1], color='#8080f0', zorder=1)
 
 	# Plot the power triangulation
 	#edge_set = frozenset(tuple(sorted(edge)) for tri in tri_list for edge in itertools.combinations(tri, 2))
@@ -197,13 +200,13 @@ def transform(array):
     shifted_array = array - [min_x, min_y]
 
     # Scale the coordinates to have a maximum size of 100
-    scaled_array = shifted_array * 100 
+    scaled_array = shifted_array * 1000 
     
     return scaled_array
 
 def undoTransform(array):
     # Scale the coordinates back to their original size
-    unscaled_array = array / 100
+    unscaled_array = array / 1000
 
     # Shift the coordinates back to their original position
     original_array = unscaled_array + [38.766844, -77.368416]
@@ -218,7 +221,7 @@ def undoTransformC(line_collection):
     # Iterate over each line segment in the LineCollection
     for line in line_collection.get_segments():
         # Scale the coordinates back to their original size
-        unscaled_segment = line / 100
+        unscaled_segment = line / 1000
 
         # Shift the coordinates back to their original position
         original_segment = unscaled_segment + [38.766844, -77.368416]
@@ -240,3 +243,7 @@ def add_line_collection_to_map(m, line_collection, color='blue', weight=2):
             weight=weight,
             opacity=1
         ).add_to(m)
+
+def add_points_to_map(m, points) :
+    for point in points:
+        folium.CircleMarker(location=point, radius=5, color='#8080f0', fill=True, fill_color='#8080f0').add_to(m)
